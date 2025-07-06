@@ -1,2 +1,2 @@
-# sandobox
+# sandbox
 砂場
