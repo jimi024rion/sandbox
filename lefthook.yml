@@ -21,6 +21,11 @@ pre-commit:
 #   parallel: true
   jobs:
     - run: echo "Hello, world!"
+  scripts:
+    "test.sh":
+      runner: bash
+
+
     # - run: yarn eslint {staged_files}
 #       glob: "*.{js,ts,jsx,tsx}"
 #
