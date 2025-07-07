@@ -21,6 +21,7 @@ pre-commit:
       script: "prehook-test1"
     - name: jobsでrunを実行する
       run: go version
+    - run: touch hoge.txt
   scripts:
     "prehook-test1":
       runner: bash
