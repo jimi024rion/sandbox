@@ -1,0 +1,2 @@
+# #!/bin/bash
+echo "prehook-test1 が実行されました！"

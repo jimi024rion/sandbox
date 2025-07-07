@@ -3,27 +3,33 @@
 #   Refer for explanation to following link:
 #   https://lefthook.dev/configuration/
 #
-# pre-push:
-#   jobs:
-#     - name: packages audit
-#       tags:
-#         - frontend
-#         - security
-#       run: yarn audit
-#
-#     - name: gems audit
-#       tags:
-#         - backend
-#         - security
-#       run: bundle audit
-#
+
+# go fmt
+# golangci-lint
+# mockry
+# tbls
+# swagg
+# swagg fmt
+# go test
+# pushしてもよいの?チェック
+
+
 pre-commit:
-#   parallel: true
+  parallel: true
   jobs:
-    - run: echo "Hello, world!"
+    - name: jobsでスクリプトを実行する
+      script: "prehook-test1"
+    - name: jobsでrunを実行する
+      run: go version
   scripts:
-    "test.sh":
+    "prehook-test1":
       runner: bash
+    "test2.sh":
+      runner: bash
+  commands:
+    makecheck:
+      run: make hello
+      glob: "Makefile"
 
 
     # - run: yarn eslint {staged_files}
