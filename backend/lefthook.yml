@@ -1,0 +1,23 @@
+# post-checkout:
+#   aqua i -l
+# post-merge
+#   aqua i -l
+# pre-commit:
+# swag fmt
+
+
+pre-commit:
+  jobs:
+    - name: swagfmt
+      root: "backend/"
+      glob: "{cmd/server/main.go,internal/presentation/http/*.go}"
+      run: |
+        if [ -n "{files}" ] && git diff --cached -- {files} | grep -qE '^\+[ \t]*// @'; then
+          make swagfmt
+        fi
+
+# pre-push:
+#   jobs:
+#     - name: go-test
+#       root: "backend/"
+#       run: go test ./...

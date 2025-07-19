@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
+# aqua - Declarative CLI Version Manager
+# https://aquaproj.github.io/
+# checksum:
+#   enabled: true
+#   require_checksum: true
+#   supported_envs:
+#   - all
+registries:
+- type: standard
+  ref: v4.387.0 # renovate: depName=aquaproj/aqua-registry
+packages:
+- name: google/wire@v0.6.0
+# - name: golang-migrate/migrate/v4@v4.17.1
+# - name: ariga/atlas/v0.22.0
+# - name: volatiletech/sqlboiler/v4@v4.16.1
+# - name: swaggo/swag/v2@v2.0.0-rc3
+# - name: vektra/mockery/v2@v2.43.2
+# - name: uber-go/guide/v0.0.12

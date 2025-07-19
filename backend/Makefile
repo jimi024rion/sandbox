@@ -1,0 +1,3 @@
+swagfmt:
+	@echo "swagfmt"
+
