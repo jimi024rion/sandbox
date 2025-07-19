@@ -10,13 +10,20 @@ pre-commit:
   jobs:
     - name: swagfmt
       root: "backend/"
-      # glob: "{cmd/server/main.go,internal/presentation/http/*.go}"
-      glob: "*{main.go,presentation/http/*.go}"
-      run: make swagfmt
-      # run: |
-      #   if [ -n "{files}" ] && git diff --cached -- {files} | grep -qE '^\+[ \t]*// @'; then
-      #     make swagfmt
-      #   fi
+      glob: "*{cmd/server/main.go,internal/presentation/http/**/*.go}"
+      run: |
+        if git diff --cached --unified=0 | grep -qE '^[+-].*//[[:space:]]*@'; then
+          echo "Swagger comment changes detected. Running swagfmt..."
+          make swagfmt
+        else
+          echo "No Swagger comment changes detected. Skipping swagfmt."
+        fi
+    - name: gofmt
+      root: "backend/"
+      glob: "*{.go}"
+      files: git diff --name-only --cached -- "*.go"
+      run: go fmt ./...
+      stage_fixed: true
 
 # pre-push:
 #   jobs:
