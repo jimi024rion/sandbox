@@ -10,11 +10,13 @@ pre-commit:
   jobs:
     - name: swagfmt
       root: "backend/"
-      glob: "{cmd/server/main.go,internal/presentation/http/*.go}"
-      run: |
-        if [ -n "{files}" ] && git diff --cached -- {files} | grep -qE '^\+[ \t]*// @'; then
-          make swagfmt
-        fi
+      # glob: "{cmd/server/main.go,internal/presentation/http/*.go}"
+      glob: "*{main.go,presentation/http/*.go}"
+      run: make swagfmt
+      # run: |
+      #   if [ -n "{files}" ] && git diff --cached -- {files} | grep -qE '^\+[ \t]*// @'; then
+      #     make swagfmt
+      #   fi
 
 # pre-push:
 #   jobs:
