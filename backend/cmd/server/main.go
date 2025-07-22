@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"sandbox/internal/presentation/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +14,7 @@ import (
 // @host localhost:8080
 // @BasePath /api/v1
 func main() {
+	fmt.Println("Starting Todo API server...")
 	r := gin.Default()
 	router := http.NewRouter()
 	router.SetupRoutes(r)
