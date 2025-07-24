@@ -15,45 +15,42 @@ post-merge:
           echo "aqua.yaml has changed. Running aqua i -l..."
           aqua i -l
         fi
-# 修正
-
 post-checkout:
-  # LEFTHOOK_OLDPREV と LEFTHOOK_NEWPREV を使って変更ファイルをリストアップ
-  # ただし、filesオプションは実行環境変数に依存しないため、直接git diffを実行する
-  # files: git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV}
   jobs:
-    - name: check_env_vars
-      run: |
-        echo "--- Lefthook Environment Variables (post-checkout) ---"
-        echo "LEFTHOOK_OLDPREV: ${LEFTHOOK_OLDPREV}"
-        echo "LEFTHOOK_NEWPREV: ${LEFTHOOK_NEWPREV}"
-        echo "LEFTHOOK_IS_BRANCH_CHECKOUT: ${LEFTHOOK_IS_BRANCH_CHECKOUT}"
-        echo "----------------------------------------------------"
-
-        # あなたの既存のロジックをここに続ける
-        if [ "${LEFTHOOK_IS_BRANCH_CHECKOUT}" -eq 1 ]; then
-          echo "post-checkoutが実行されたぜえええ"
-          # ... aqua i -l などの処理 ...
-        else
-          echo "ブランチのチェックアウトではないため、post-checkout処理をスキップします。"
-        fi
-    - name: install aqua packages after checkout if aqua.yaml changed
+    - name: install aqua packages if aqua.yaml changed
       root: "backend/"
-      glob:
-        - "backend/aqua.yaml"
       run: |
-        # LEFTHOOK_IS_BRANCH_CHECKOUT が "1" (ブランチチェックアウト) の場合のみ実行
-        # ファイルチェックアウトや特定のコミットへの一時的な切り替えは対象外
-        if [ "${LEFTHOOK_IS_BRANCH_CHECKOUT}" -eq 1 ]; then
-          echo "post-checkoutが実行されたぜえええ"
-          # Lefthookのglobとfilesオプションが既にaqua.yamlの変更を検出しているが、
-          # より確実性を期すため、ここでは追加のチェックは行わない（globに任せる）
-          # もし、glob以外で複雑な条件を加えたい場合は、ここに記述する
+        # Gitフックから渡される引数をチェック
+        # {1}: prev_ref, {2}: new_ref, {3}: is_branch_checkout
 
-          echo "aqua.yaml has changed after checkout. Running aqua i -l..."
+        echo "1kaime"
+        echo "{1}" "{2}" "{3}"
+        echo "2kaime"
+        echo "$1 $2 $3"
+
+
+        if [ "{3}" != "1" ]; then
+          echo "Not a branch checkout, skipping."
+          exit 0
+        fi
+
+        # チェックアウト前後で変更されたファイルを取得
+        CHANGED_FILES=$(git diff --name-only "{1}" "{2}")
+
+        if [ -z "$CHANGED_FILES" ]; then
+          echo "No files changed."
+          exit 0
+        fi
+
+        echo "Changed files:"
+        echo "$CHANGED_FILES"
+
+        # backend/aqua.yaml に変更があったか確認
+        if echo "$CHANGED_FILES" | grep -q "backend/aqua.yaml"; then
+          echo "aqua.yaml has changed. Running 'aqua i -l'..."
           aqua i -l
         else
-          echo "ブランチのチェックアウトではないため、post-checkout処理をスキップします。"
+          echo "aqua.yaml has not changed."
         fi
 
 pre-commit:
