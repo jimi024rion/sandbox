@@ -21,5 +21,3 @@ packages:
 # - name: swaggo/swag/v2@v2.0.0-rc3
 # - name: vektra/mockery/v2@v2.43.2
 # - name: uber-go/guide/v0.0.12
-
-# post-mergeのテスト
