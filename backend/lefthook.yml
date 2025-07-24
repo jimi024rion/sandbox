@@ -16,9 +16,12 @@ post-merge:
           aqua i -l
         fi
 post-checkout:
+  files: git diff --name-only "{1}" "{2}"
   jobs:
     - name: install aqua packages if aqua.yaml changed
       root: "backend/"
+      glob:
+        - "backend/aqua.yaml"
       run: |
         # Gitフックから渡される引数をチェック
         # {1}: prev_ref, {2}: new_ref, {3}: is_branch_checkout
