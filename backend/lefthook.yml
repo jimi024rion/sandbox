@@ -1,5 +1,10 @@
-# post-checkout:
-#   aqua i -l
+post-checkout:
+  files: git diff --name-only HEAD{1} HEAD
+  jobs:
+    - name: てすと
+      root: "backend/"
+      glob: aqua.yaml
+      run: echo "Post-checkout hook executed successfully.{files}"
 # post-merge
 #   aqua i -l
 # pre-commit:
