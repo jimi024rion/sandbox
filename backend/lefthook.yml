@@ -1,13 +1,14 @@
 # lefthook.yml
-post-checkout:
+post-merge:
   jobs:
-    - name: check aqua.yaml changes
-      # Lefthook はフック引数を環境変数として渡します:
-      # LEFTHOOK_OLDPREV と LEFTHOOK_NEWPREV
+    - name: install aqua packages if aqua.yaml changed
       run: |
-        echo $(git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV})
-        if git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV} | grep -q aqua.yaml; then
-          echo "hello aqua"
+        # マージによってaqua.yamlが変更されたかを確認
+        # HEAD^1 はマージ前のコミットを指します
+        # HEAD はマージ後の現在のコミットを指します
+        if git diff --name-only HEAD^1 HEAD | grep -q aqua.yaml; then
+          echo "aqua.yaml has changed. Running aqua i -l..."
+          aqua i -l
         fi
 
 
