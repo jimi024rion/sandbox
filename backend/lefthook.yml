@@ -1,8 +1,13 @@
 # lefthook.yml
 post-merge:
+  files: git diff --name-only HEAD^1 HEAD
   jobs:
     - name: install aqua packages if aqua.yaml changed
+      root: "backend/"
+      glob:
+        - "backend/aqua.yaml"
       run: |
+        echo "実行されたぜえええ"
         # マージによってaqua.yamlが変更されたかを確認
         # HEAD^1 はマージ前のコミットを指します
         # HEAD はマージ後の現在のコミットを指します
@@ -11,6 +16,30 @@ post-merge:
           aqua i -l
         fi
 # 修正
+
+post-checkout:
+  # LEFTHOOK_OLDPREV と LEFTHOOK_NEWPREV を使って変更ファイルをリストアップ
+  # ただし、filesオプションは実行環境変数に依存しないため、直接git diffを実行する
+  files: git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV}
+  jobs:
+    - name: install aqua packages after checkout if aqua.yaml changed
+      root: "backend/"
+      glob:
+        - "backend/aqua.yaml"
+      run: |
+        # LEFTHOOK_IS_BRANCH_CHECKOUT が "1" (ブランチチェックアウト) の場合のみ実行
+        # ファイルチェックアウトや特定のコミットへの一時的な切り替えは対象外
+        if [ "${LEFTHOOK_IS_BRANCH_CHECKOUT}" -eq 1 ]; then
+          echo "post-checkoutが実行されたぜえええ"
+          # Lefthookのglobとfilesオプションが既にaqua.yamlの変更を検出しているが、
+          # より確実性を期すため、ここでは追加のチェックは行わない（globに任せる）
+          # もし、glob以外で複雑な条件を加えたい場合は、ここに記述する
+
+          echo "aqua.yaml has changed after checkout. Running aqua i -l..."
+          aqua i -l
+        else
+          echo "ブランチのチェックアウトではないため、post-checkout処理をスキップします。"
+        fi
 
 pre-commit:
   jobs:
