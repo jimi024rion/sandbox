@@ -22,6 +22,21 @@ post-checkout:
   # ただし、filesオプションは実行環境変数に依存しないため、直接git diffを実行する
   files: git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV}
   jobs:
+    - name: check_env_vars
+      run: |
+        echo "--- Lefthook Environment Variables (post-checkout) ---"
+        echo "LEFTHOOK_OLDPREV: ${LEFTHOOK_OLDPREV}"
+        echo "LEFTHOOK_NEWPREV: ${LEFTHOOK_NEWPREV}"
+        echo "LEFTHOOK_IS_BRANCH_CHECKOUT: ${LEFTHOOK_IS_BRANCH_CHECKOUT}"
+        echo "----------------------------------------------------"
+
+        # あなたの既存のロジックをここに続ける
+        if [ "${LEFTHOOK_IS_BRANCH_CHECKOUT}" -eq 1 ]; then
+          echo "post-checkoutが実行されたぜえええ"
+          # ... aqua i -l などの処理 ...
+        else
+          echo "ブランチのチェックアウトではないため、post-checkout処理をスキップします。"
+        fi
     - name: install aqua packages after checkout if aqua.yaml changed
       root: "backend/"
       glob:
