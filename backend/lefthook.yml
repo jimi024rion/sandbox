@@ -20,7 +20,7 @@ post-merge:
 post-checkout:
   # LEFTHOOK_OLDPREV と LEFTHOOK_NEWPREV を使って変更ファイルをリストアップ
   # ただし、filesオプションは実行環境変数に依存しないため、直接git diffを実行する
-  files: git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV}
+  # files: git diff --name-only ${LEFTHOOK_OLDPREV} ${LEFTHOOK_NEWPREV}
   jobs:
     - name: check_env_vars
       run: |
