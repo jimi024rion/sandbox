@@ -10,7 +10,7 @@ post-merge:
           echo "aqua.yaml has changed. Running aqua i -l..."
           aqua i -l
         fi
-
+# 修正
 
 pre-commit:
   jobs:
